@@ -1,0 +1,35 @@
+{
+  "name": "oavax-core",
+  "version": "0.7.8",
+  "license": "MIT",
+  "description": "Core contracts for the oAVAX protocol on Avalanche",
+  "files": [
+    "contracts",
+    "build"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oavax/oavax-core.git"
+  },
+  "keywords": [
+    "oavax",
+    "oavax contracts",
+    "avalanche"
+  ],
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.1.0",
+    "@openzeppelin/test-helpers": "^0.5.11",
+    "@truffle/hdwallet-provider": "^2.0.0",
+    "truffle": "5.1.42",
+    "truffle-flattener": "^1.5.0"
+  },
+  "bugs": {
+    "url": "https://github.com/oavax/oavax-core/issues"
+  },
+  "homepage": "https://github.com/oavax/oavax-core#readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "oavax"
+}
