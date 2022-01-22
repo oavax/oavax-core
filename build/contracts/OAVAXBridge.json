@@ -47,7 +47,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -60,7 +61,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -73,7 +75,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -2519,9 +2522,37 @@
     "name": "solc",
     "version": "0.6.12+commit.27d51765.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "43114": {
+      "events": {
+        "0x22e3f162fca16dc0fcfb65eddf406531a0c555a2c24c58cf5d10fc2d202a882e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "user",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "Bridge",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xE48357edDfe273d2a0b82B4F74B4C2b3F01ea918",
+      "transactionHash": "0x8b74214f66d6f29baec11bc9dd9d68eb93bf74df7b300ee6aecbea528ddd4158"
+    }
+  },
   "schemaVersion": "3.2.4",
-  "updatedAt": "2022-01-22T05:57:26.536Z",
+  "updatedAt": "2022-01-22T07:01:14.435Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

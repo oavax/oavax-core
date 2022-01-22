@@ -37,8 +37,8 @@ module.exports = {
     avalanche: {
 	    provider: () => new HDWalletProvider(mnemonic, 'https://api.avax.network/ext/bc/C/rpc'),
 	    network_id: 43114,
-	    gasPrice: 35000000000,
-	    gas: 5000000,
+	    gasPrice: 40000000000,
+	    gas: 4000000,
 	    //gasPrice: 500000000000,
 	    confirmations: 2,
 	    skipDryRun: true

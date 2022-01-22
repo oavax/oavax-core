@@ -9,7 +9,7 @@ import "./Ownable.sol";
 
 
 // OAVAXToken with Governance.
-contract TokenLock is Ownable, ERC20("OAVAX Developer Lock", "OAVAXdl"){
+contract OAVAXLock is Ownable, ERC20("OAVAX Developer Lock", "OAVAXdl"){
 
 
 	uint public lastPaymentBlocktime = 0;

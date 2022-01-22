@@ -13,10 +13,10 @@ contract OAVAXDelegate is Ownable{
 	mapping(address => delegatorData) public delegatorStats;
 	address private multiTransfer;
 	address public bbusd = 0x19860CCB0A68fd4213aB9D8266F7bBf05A8dDe98;
-	address public oavax = 0x7767f8ed52F9c8AB777512D649006fFD77008882;
+	address public oavax = 0xd87458dd27A1D3C47Fe620D05668169e5a85B064;
 	address public wavax = 0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7;
 
-	IUniswapV2Factory public immutable factory = IUniswapV2Factory(0xCcb4A1e7FDDF1201565A8B802A39aeD0e6458622);
+	IUniswapV2Factory public immutable factory = IUniswapV2Factory(0x161FdbA801F1cC81DcB9f4e90c9f06E5317d3D7d);
 
 	struct delegatorData {
 	   address delegatorAddr;
