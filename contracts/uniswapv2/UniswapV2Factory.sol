@@ -27,10 +27,10 @@ contract UniswapV2Factory is IUniswapV2Factory {
     }
 
     function createPair(address tokenA, address tokenB) external override returns (address pair) {
-        require(tokenA != tokenB, 'oAVAX IDENTICAL_ADDRESSES');
+        require(tokenA != tokenB, 'OAVAX IDENTICAL_ADDRESSES');
         (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
-        require(token0 != address(0), 'oAVAX ZERO_ADDRESS');
-        require(getPair[token0][token1] == address(0), 'oAVAX PAIR_EXISTS'); // single check is sufficient
+        require(token0 != address(0), 'OAVAX ZERO_ADDRESS');
+        require(getPair[token0][token1] == address(0), 'OAVAX PAIR_EXISTS'); // single check is sufficient
         bytes memory bytecode = type(UniswapV2Pair).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
         assembly {
@@ -45,12 +45,12 @@ contract UniswapV2Factory is IUniswapV2Factory {
     }
 
     function setFeeTo(address _feeTo) external override {
-        require(msg.sender == feeToSetter, 'oAVAX FORBIDDEN');
+        require(msg.sender == feeToSetter, 'OAVAX FORBIDDEN');
         feeTo = _feeTo;
     }
 
     function setFeeToSetter(address _feeToSetter) external override {
-        require(msg.sender == feeToSetter, 'oAVAX FORBIDDEN');
+        require(msg.sender == feeToSetter, 'OAVAX FORBIDDEN');
         feeToSetter = _feeToSetter;
     }
 

@@ -6,7 +6,7 @@ import "./ERC20SNT/ERC20SNT.sol";
 import "./Ownable.sol";
 
 
-//oAVAXVote Token Can not be Transfered by users. only the owner //masterchef
+//OAVAXVote Token Can not be Transfered by users. only the owner //masterchef
 //can send them to you. once sent they are unmovable.
 //Dev Doesnt get this token. It is meant to be used as means of communication
 //of user OAVAXv.
@@ -20,7 +20,7 @@ import "./Ownable.sol";
 
 
 
-contract oAVAXVote is ERC20SNT("Open AVAX Vote", "OAVAXv", address(0)), Ownable {
+contract OAVAXVote is ERC20SNT("Open AVAX Vote", "OAVAXv", address(0)), Ownable {
 
     function mint(address _to, uint256 _amount) public onlyOwner{
         _mint(_to, _amount);

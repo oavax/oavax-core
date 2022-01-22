@@ -4,15 +4,15 @@ pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "./oAVAXToken.sol";
+import "./OAVAXToken.sol";
 
 
-contract oAVAXBridge is ReentrancyGuard {
+contract OAVAXBridge is ReentrancyGuard {
 	IERC20 public oavaxV1;
-	oAVAXToken public oavaxV2;
+	OAVAXToken public oavaxV2;
 	address public burnAddress = 0xdEad000000000000000000000000000000000000;
 
-	constructor(IERC20 _oavaxV1, oAVAXToken _oavaxV2) public {
+	constructor(IERC20 _oavaxV1, OAVAXToken _oavaxV2) public {
 		oavaxV1 = _oavaxV1;
 		oavaxV2 = _oavaxV2;
 	}

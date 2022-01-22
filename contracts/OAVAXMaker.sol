@@ -10,11 +10,11 @@ import "./uniswapv2/interfaces/IUniswapV2Factory.sol";
 
 import "./Ownable.sol";
 
-// SushiMaker is MasterChef's left hand and kinda a wizard. He can cook up Sushi from pretty much anything!
-// This contract handles "serving up" rewards for xSushi holders by trading tokens collected from fees for Sushi.
+// OAVAXMaker is MasterChef's left hand and kinda a wizard. He can cook up OAVAX from pretty much anything!
+// This contract handles "serving up" rewards for OAVAXx holders by trading tokens collected from fees for OAVAX.
 
 // T1 - T4: OK
-contract SushiMaker is Ownable {
+contract OAVAXMaker is Ownable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -22,9 +22,9 @@ contract SushiMaker is Ownable {
     IUniswapV2Factory public immutable factory;
     // V1 - V5: OK
     // V1 - V5: OK
-    address private immutable sushi;
+    address private immutable oavax;
     // V1 - V5: OK
-    address private immutable weth;
+    address private immutable wavax;
 
     // V1 - V5: OK
     mapping(address => address) internal _bridges;
@@ -32,13 +32,13 @@ contract SushiMaker is Ownable {
     // E1: OK
     event LogBridgeSet(address indexed token, address indexed bridge);
     // E1: OK
-    event LogConvert(address indexed server, address indexed token0, address indexed token1, uint256 amount0, uint256 amount1, uint256 amountSUSHI);
+    event LogConvert(address indexed server, address indexed token0, address indexed token1, uint256 amount0, uint256 amount1, uint256 amountOAVAX);
 
 
-    constructor (address _factory, address _sushi, address _weth) public {
+    constructor (address _factory, address _oavax, address _wavax) public {
        factory = IUniswapV2Factory(_factory);
-       sushi = _sushi;
-       weth = _weth;
+       oavax = _oavax;
+       wavax = _wavax;
     }
 
     // F1 - F10: OK
@@ -46,7 +46,7 @@ contract SushiMaker is Ownable {
     function bridgeFor(address token) public view returns (address bridge) {
         bridge = _bridges[token];
         if (bridge == address(0)) {
-            bridge = weth;
+            bridge = wavax;
         }
     }
 
@@ -54,7 +54,7 @@ contract SushiMaker is Ownable {
     // C1 - C24: OK
     function setBridge(address token, address bridge) external onlyOwner {
         // Checks
-        require(token != sushi && token != weth && token != bridge, "oAVAX Maker: Invalid bridge");
+        require(token != oavax && token != wavax && token != bridge, "OAVAX Maker: Invalid bridge");
 
         // Effects
         _bridges[token] = bridge;
@@ -66,14 +66,14 @@ contract SushiMaker is Ownable {
     // C6: It's not a fool proof solution, but it prevents flash loans, so here it's ok to use tx.origin
     modifier onlyEOA() {
         // Try to make flash-loan exploit harder to do by only allowing externally owned addresses.
-        require(msg.sender == tx.origin, "oAVAX Maker: must use EOA");
+        require(msg.sender == tx.origin, "OAVAX Maker: must use EOA");
         _;
     }
 
     // F1 - F10: OK
     // F3: _convert is separate to save gas by only checking the 'onlyEOA' modifier once in case of convertMultiple
-    // F6: There is an exploit to add lots of SUSHI to the bar, run convert, then remove the SUSHI again.
-    //     As the size of the SushiBar has grown, this requires large amounts of funds and isn't super profitable anymore
+    // F6: There is an exploit to add lots of OAVAX to the bar, run convert, then remove the OAVAX again.
+    //     As the size of the OAVAXBar has grown, this requires large amounts of funds and isn't super profitable anymore
     //     The onlyEOA modifier prevents this being oavax with a flash loan.
     // C1 - C24: OK
     function convert(address token0, address token1) external onlyEOA() {
@@ -97,7 +97,7 @@ contract SushiMaker is Ownable {
         // Interactions
         // S1 - S4: OK
         IUniswapV2Pair pair = IUniswapV2Pair(factory.getPair(token0, token1));
-        require(address(pair) != address(0), "oAVAX Maker: Invalid pair");
+        require(address(pair) != address(0), "OAVAX Maker: Invalid pair");
         // balanceOf: S1 - S4: OK
         // transfer: X1 - X5: OK
         IERC20(address(pair)).safeTransfer(address(pair), pair.balanceOf(address(this)));
@@ -111,46 +111,46 @@ contract SushiMaker is Ownable {
 
     // F1 - F10: OK
     // C1 - C24: OK
-    // All safeTransfer, _swap, _toSUSHI, _convertStep: X1 - X5: OK
-    function _convertStep(address token0, address token1, uint256 amount0, uint256 amount1) internal returns(uint256 sushiOut) {
+    // All safeTransfer, _swap, _toOAVAX, _convertStep: X1 - X5: OK
+    function _convertStep(address token0, address token1, uint256 amount0, uint256 amount1) internal returns(uint256 oavaxOut) {
         // Interactions
         if (token0 == token1) {
             uint256 amount = amount0.add(amount1);
-            if (token0 == sushi) {
-                IERC20BURNABLE(sushi).burn(address(this), amount); //burn
-                sushiOut = amount;
-            } else if (token0 == weth) {
-                sushiOut = _toSUSHI(weth, amount);
+            if (token0 == oavax) {
+                IERC20BURNABLE(oavax).burn(address(this), amount); //burn
+                oavaxOut = amount;
+            } else if (token0 == wavax) {
+                oavaxOut = _toOAVAX(wavax, amount);
             } else {
                 address bridge = bridgeFor(token0);
                 amount = _swap(token0, bridge, amount, address(this));
-                sushiOut = _convertStep(bridge, bridge, amount, 0);
+                oavaxOut = _convertStep(bridge, bridge, amount, 0);
             }
-        } else if (token0 == sushi) { // eg. SUSHI - ETH
-            IERC20BURNABLE(sushi).burn(address(this), amount0); //BURN
-            sushiOut = _toSUSHI(token1, amount1).add(amount0);
-        } else if (token1 == sushi) { // eg. USDT - SUSHI
-            IERC20BURNABLE(sushi).burn(address(this), amount1); //BURN
-            sushiOut = _toSUSHI(token0, amount0).add(amount1); 
-        } else if (token0 == weth) { // eg. ETH - USDC
-            sushiOut = _toSUSHI(weth, _swap(token1, weth, amount1, address(this)).add(amount0));
-        } else if (token1 == weth) { // eg. USDT - ETH
-            sushiOut = _toSUSHI(weth, _swap(token0, weth, amount0, address(this)).add(amount1));
+        } else if (token0 == oavax) { // eg. OAVAX - AVAX
+            IERC20BURNABLE(oavax).burn(address(this), amount0); //BURN
+            oavaxOut = _toOAVAX(token1, amount1).add(amount0);
+        } else if (token1 == oavax) { // eg. USDT - OAVAX
+            IERC20BURNABLE(oavax).burn(address(this), amount1); //BURN
+            oavaxOut = _toOAVAX(token0, amount0).add(amount1); 
+        } else if (token0 == wavax) { // eg. AVAX - USDC
+            oavaxOut = _toOAVAX(wavax, _swap(token1, wavax, amount1, address(this)).add(amount0));
+        } else if (token1 == wavax) { // eg. USDT - AVAX
+            oavaxOut = _toOAVAX(wavax, _swap(token0, wavax, amount0, address(this)).add(amount1));
         } else { // eg. MIC - USDT
             address bridge0 = bridgeFor(token0);
             address bridge1 = bridgeFor(token1);
             if (bridge0 == token1) { // eg. MIC - USDT - and bridgeFor(MIC) = USDT
-                sushiOut = _convertStep(bridge0, token1,
+                oavaxOut = _convertStep(bridge0, token1,
                     _swap(token0, bridge0, amount0, address(this)),
                     amount1
                 );
             } else if (bridge1 == token0) { // eg. WBTC - DSD - and bridgeFor(DSD) = WBTC
-                sushiOut = _convertStep(token0, bridge1,
+                oavaxOut = _convertStep(token0, bridge1,
                     amount0,
                     _swap(token1, bridge1, amount1, address(this))
                 );
             } else {
-                sushiOut = _convertStep(bridge0, bridge1, // eg. USDT - DSD - and bridgeFor(DSD) = WBTC
+                oavaxOut = _convertStep(bridge0, bridge1, // eg. USDT - DSD - and bridgeFor(DSD) = WBTC
                     _swap(token0, bridge0, amount0, address(this)),
                     _swap(token1, bridge1, amount1, address(this))
                 );
@@ -165,7 +165,7 @@ contract SushiMaker is Ownable {
         // Checks
         // X1 - X5: OK
         IUniswapV2Pair pair = IUniswapV2Pair(factory.getPair(fromToken, toToken));
-        require(address(pair) != address(0), "oAVAX Maker: Cannot convert");
+        require(address(pair) != address(0), "OAVAX Maker: Cannot convert");
 
         // Interactions
         // X1 - X5: OK
@@ -186,9 +186,9 @@ contract SushiMaker is Ownable {
 
     // F1 - F10: OK
     // C1 - C24: OK
-    function _toSUSHI(address token, uint256 amountIn) internal returns(uint256 amountOut) {
+    function _toOAVAX(address token, uint256 amountIn) internal returns(uint256 amountOut) {
         // X1 - X5: OK
-        amountOut = _swap(token, sushi, amountIn, address(this));
-        IERC20BURNABLE(sushi).burn(address(this), amountOut);
+        amountOut = _swap(token, oavax, amountIn, address(this));
+        IERC20BURNABLE(oavax).burn(address(this), amountOut);
     }
 }

@@ -1,5 +1,5 @@
 {
-  "contractName": "IMASTERCHEF",
+  "contractName": "IOAVAXCHEF",
   "abi": [
     {
       "inputs": [],
@@ -33,34 +33,34 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_pid\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"extWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"poolLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/opt/1oavax/oavax-core/contracts/interfaces/IMasterchef.sol\":\"IMASTERCHEF\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/opt/1oavax/oavax-core/contracts/interfaces/IMasterchef.sol\":{\"keccak256\":\"0x8261f1872a65b774471e1e32ca224fed7a4da67237c7c6f3751c96a065d9a77c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a89feae1b133bc7753058940d9d7a91c611c79375aebe1c9e5226081b8d4b6b7\",\"dweb:/ipfs/QmQkWYzZ3AUTLRzS8fzBcmMrXrf1cTYFLrnAAKkMtCkL6K\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_pid\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"extWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"poolLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/opt/1oavax/release/oavax-core/contracts/interfaces/IOAVAXChef.sol\":\"IOAVAXCHEF\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/opt/1oavax/release/oavax-core/contracts/interfaces/IOAVAXChef.sol\":{\"keccak256\":\"0xa20a4ec4b0a4336846ce00efac274b5daed75384fe04dcf598b192fe2b10835d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0c31a6fed1f8a55a6d24c787c79bf1d4cba826e2315ff987e3ccddaa7962b353\",\"dweb:/ipfs/QmZqG4NMNbt5iYKtz2Rp1LsrmxHeYzuuWM8wgWQGHpSK6j\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.6.12;\r\n\r\ninterface IMASTERCHEF {\r\n    function poolLength() external view returns (uint256);\r\n    function extWithdraw(uint256 _pid, address _user) external;\r\n}",
-  "sourcePath": "/opt/1oavax/oavax-core/contracts/interfaces/IMasterchef.sol",
+  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.6.12;\r\n\r\ninterface IOAVAXCHEF {\r\n    function poolLength() external view returns (uint256);\r\n    function extWithdraw(uint256 _pid, address _user) external;\r\n}",
+  "sourcePath": "/opt/1oavax/release/oavax-core/contracts/interfaces/IOAVAXChef.sol",
   "ast": {
-    "absolutePath": "/opt/1oavax/oavax-core/contracts/interfaces/IMasterchef.sol",
+    "absolutePath": "/opt/1oavax/release/oavax-core/contracts/interfaces/IOAVAXChef.sol",
     "exportedSymbols": {
-      "IMASTERCHEF": [
-        5096
+      "IOAVAXCHEF": [
+        5918
       ]
     },
-    "id": 5097,
+    "id": 5919,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5083,
+        "id": 5905,
         "literals": [
           "solidity",
           "0.6",
           ".12"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:14"
+        "src": "33:23:19"
       },
       {
         "abstract": false,
@@ -69,18 +69,18 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 5096,
+        "id": 5918,
         "linearizedBaseContracts": [
-          5096
+          5918
         ],
-        "name": "IMASTERCHEF",
+        "name": "IOAVAXCHEF",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": null,
             "documentation": null,
             "functionSelector": "081e3eda",
-            "id": 5088,
+            "id": 5910,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -88,24 +88,24 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 5084,
+              "id": 5906,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "108:2:14"
+              "src": "107:2:19"
             },
             "returnParameters": {
-              "id": 5087,
+              "id": 5909,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5086,
+                  "id": 5908,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 5088,
-                  "src": "134:7:14",
+                  "scope": 5910,
+                  "src": "133:7:19",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -113,10 +113,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5085,
+                    "id": 5907,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "134:7:14",
+                    "src": "133:7:19",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -126,10 +126,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "133:9:14"
+              "src": "132:9:19"
             },
-            "scope": 5096,
-            "src": "89:54:14",
+            "scope": 5918,
+            "src": "88:54:19",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -138,7 +138,7 @@
             "body": null,
             "documentation": null,
             "functionSelector": "4e9ad15a",
-            "id": 5095,
+            "id": 5917,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -146,18 +146,18 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 5093,
+              "id": 5915,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5090,
+                  "id": 5912,
                   "mutability": "mutable",
                   "name": "_pid",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 5095,
-                  "src": "170:12:14",
+                  "scope": 5917,
+                  "src": "169:12:19",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -165,10 +165,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5089,
+                    "id": 5911,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "170:7:14",
+                    "src": "169:7:19",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -179,13 +179,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5092,
+                  "id": 5914,
                   "mutability": "mutable",
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 5095,
-                  "src": "184:13:14",
+                  "scope": 5917,
+                  "src": "183:13:19",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -193,10 +193,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5091,
+                    "id": 5913,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "184:7:14",
+                    "src": "183:7:19",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -207,47 +207,47 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "169:29:14"
+              "src": "168:29:19"
             },
             "returnParameters": {
-              "id": 5094,
+              "id": 5916,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "207:0:14"
+              "src": "206:0:19"
             },
-            "scope": 5096,
-            "src": "149:59:14",
+            "scope": 5918,
+            "src": "148:59:19",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 5097,
-        "src": "60:151:14"
+        "scope": 5919,
+        "src": "60:150:19"
       }
     ],
-    "src": "33:178:14"
+    "src": "33:177:19"
   },
   "legacyAST": {
-    "absolutePath": "/opt/1oavax/oavax-core/contracts/interfaces/IMasterchef.sol",
+    "absolutePath": "/opt/1oavax/release/oavax-core/contracts/interfaces/IOAVAXChef.sol",
     "exportedSymbols": {
-      "IMASTERCHEF": [
-        5096
+      "IOAVAXCHEF": [
+        5918
       ]
     },
-    "id": 5097,
+    "id": 5919,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5083,
+        "id": 5905,
         "literals": [
           "solidity",
           "0.6",
           ".12"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:14"
+        "src": "33:23:19"
       },
       {
         "abstract": false,
@@ -256,18 +256,18 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 5096,
+        "id": 5918,
         "linearizedBaseContracts": [
-          5096
+          5918
         ],
-        "name": "IMASTERCHEF",
+        "name": "IOAVAXCHEF",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": null,
             "documentation": null,
             "functionSelector": "081e3eda",
-            "id": 5088,
+            "id": 5910,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -275,24 +275,24 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 5084,
+              "id": 5906,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "108:2:14"
+              "src": "107:2:19"
             },
             "returnParameters": {
-              "id": 5087,
+              "id": 5909,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5086,
+                  "id": 5908,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 5088,
-                  "src": "134:7:14",
+                  "scope": 5910,
+                  "src": "133:7:19",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -300,10 +300,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5085,
+                    "id": 5907,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "134:7:14",
+                    "src": "133:7:19",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -313,10 +313,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "133:9:14"
+              "src": "132:9:19"
             },
-            "scope": 5096,
-            "src": "89:54:14",
+            "scope": 5918,
+            "src": "88:54:19",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -325,7 +325,7 @@
             "body": null,
             "documentation": null,
             "functionSelector": "4e9ad15a",
-            "id": 5095,
+            "id": 5917,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -333,18 +333,18 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 5093,
+              "id": 5915,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5090,
+                  "id": 5912,
                   "mutability": "mutable",
                   "name": "_pid",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 5095,
-                  "src": "170:12:14",
+                  "scope": 5917,
+                  "src": "169:12:19",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -352,10 +352,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 5089,
+                    "id": 5911,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "170:7:14",
+                    "src": "169:7:19",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -366,13 +366,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5092,
+                  "id": 5914,
                   "mutability": "mutable",
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 5095,
-                  "src": "184:13:14",
+                  "scope": 5917,
+                  "src": "183:13:19",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -380,10 +380,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5091,
+                    "id": 5913,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "184:7:14",
+                    "src": "183:7:19",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -394,26 +394,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "169:29:14"
+              "src": "168:29:19"
             },
             "returnParameters": {
-              "id": 5094,
+              "id": 5916,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "207:0:14"
+              "src": "206:0:19"
             },
-            "scope": 5096,
-            "src": "149:59:14",
+            "scope": 5918,
+            "src": "148:59:19",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 5097,
-        "src": "60:151:14"
+        "scope": 5919,
+        "src": "60:150:19"
       }
     ],
-    "src": "33:178:14"
+    "src": "33:177:19"
   },
   "compiler": {
     "name": "solc",
@@ -421,7 +421,7 @@
   },
   "networks": {},
   "schemaVersion": "3.2.4",
-  "updatedAt": "2022-01-20T13:30:51.165Z",
+  "updatedAt": "2022-01-22T05:57:26.595Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

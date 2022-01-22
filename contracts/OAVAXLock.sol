@@ -8,12 +8,12 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./Ownable.sol";
 
 
-// SushiToken with Governance.
-contract TokenLock is Ownable, ERC20("oAVAX Develop Lock", "OAVAXdl"){
+// OAVAXToken with Governance.
+contract TokenLock is Ownable, ERC20("OAVAX Developer Lock", "OAVAXdl"){
 
 
 	uint public lastPaymentBlocktime = 0;
-	ERC20 public oAVAXToken;
+	ERC20 public OAVAXToken;
 	address public Dev;
 	uint public constant weiPerWeek = 55384615384615000000000;
 
@@ -30,8 +30,8 @@ contract TokenLock is Ownable, ERC20("oAVAX Develop Lock", "OAVAXdl"){
 	    _mint(address(this), 14400000000000000000000000);
 	}
 
-	function setoAVAXToken(address _oAVAX) public onlyOwner{
-		oAVAXToken = ERC20(_oAVAX);
+	function setOAVAXToken(address _OAVAX) public onlyOwner{
+		OAVAXToken = ERC20(_OAVAX);
 	}
 
 	function setDev(address _Dev) public onlyOwner{
@@ -39,15 +39,15 @@ contract TokenLock is Ownable, ERC20("oAVAX Develop Lock", "OAVAXdl"){
 	}
 
 	function payDev() public onlyOnceEveryWeek{
-		uint contractBalance = oAVAXToken.balanceOf( address(this)); //get contracts oAVAX balance
+		uint contractBalance = OAVAXToken.balanceOf( address(this)); //get contracts OAVAX balance
 
 		if(contractBalance < weiPerWeek){ // makes sure last transfer will be able to go through
-			oAVAXToken.transfer(Dev, contractBalance);
-			_burn( address(this), contractBalance);	// burn oLOCK token to match oAVAX balance
+			OAVAXToken.transfer(Dev, contractBalance);
+			_burn( address(this), contractBalance);	// burn oLOCK token to match OAVAX balance
 		}
 		else {
-			oAVAXToken.transfer(Dev, weiPerWeek); //send predefined weekly amount to dev as payement
-			_burn( address(this), weiPerWeek); // burn oLOCK token to match oAVAX balance
+			OAVAXToken.transfer(Dev, weiPerWeek); //send predefined weekly amount to dev as payement
+			_burn( address(this), weiPerWeek); // burn oLOCK token to match OAVAX balance
 		}
 		lastPaymentBlocktime = now;
 	}

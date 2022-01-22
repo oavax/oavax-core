@@ -3,28 +3,28 @@
 pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "./interfaces/IoAVAXVote.sol";
+import "./interfaces/IOAVAXVote.sol";
 import "./Ownable.sol";
 
 
-// oAVAX Token with bridge token logic and non-transferable non-valuable Vote token
+// OAVAX Token with bridge token logic and non-transferable non-valuable Vote token
 
 //Bridge
 // it can only be closed.
 // it can only be set once
-// Bridge Setter is set during deployement to add bridge address after deployement, //Bridge needs oAVAX to be deployed prior
+// Bridge Setter is set during deployement to add bridge address after deployement, //Bridge needs OAVAX to be deployed prior
 // then it is set at 0 address to remove the right to change bridge address.
 // Dev address can only change itself, and close bridge. has no power over anything.
 
-//oAVAX Token
+//OAVAX Token
 //Can Only be minted by Masterchef
 //Can be burnt
 //Is the owner of VoteTokens
-//Mints VoteTokens 1:1 oAVAX Tokens
+//Mints VoteTokens 1:1 OAVAX Tokens
 
 
-contract oAVAXToken is ERC20("Open AVAX", "OAVAX"), Ownable {
-    IoAVAXVote public voteToken;
+contract OAVAXToken is ERC20("Open AVAX", "OAVAX"), Ownable {
+    IOAVAXVote public voteToken;
     address public devAddr;
     address public bridgeAddress;
     bool public bridgeOpen = true;
@@ -51,7 +51,7 @@ contract oAVAXToken is ERC20("Open AVAX", "OAVAX"), Ownable {
         _;
     }
 
-    constructor(IoAVAXVote _voteAddress) public{
+    constructor(IOAVAXVote _voteAddress) public{
         devAddr = msg.sender;
         voteToken = _voteAddress;
     }

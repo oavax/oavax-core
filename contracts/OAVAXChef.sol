@@ -9,18 +9,18 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./Ownable.sol";
-import "./oAVAXToken.sol";
+import "./OAVAXToken.sol";
 
 
 
-// MasterChef is the master of Sushi. He can make Sushi and he is a fair guy.
+// OAVAXChef is the master of OAVAX. He can make OAVAX and he is a fair guy.
 //
 // Note that it's ownable and the owner wields tremendous power. The ownership
-// will be transferred to a governance smart contract once oAVAX is sufficiently
+// will be transferred to a governance smart contract once OAVAX is sufficiently
 // distributed and the community can show to govern itself.
 //
 // Have fun reading it. Hopefully it's bug-free. God bless.
-contract MasterChef is Ownable, ReentrancyGuard {
+contract OAVAXChef is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
     // Info of each user.
@@ -28,13 +28,13 @@ contract MasterChef is Ownable, ReentrancyGuard {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
         //
-        // We do some fancy math here. Basically, any point in time, the amount of SUSHIs
+        // We do some fancy math here. Basically, any point in time, the amount of OAVAXs
         // entitled to a user but is pending to be distributed is:
         //
-        //   pending reward = (user.amount * pool.accoAVAXPerShare) - user.rewardDebt
+        //   pending reward = (user.amount * pool.accOAVAXPerShare) - user.rewardDebt
         //
         // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
-        //   1. The pool's `accoAVAXPerShare` (and `lastRewardBlock`) gets updated.
+        //   1. The pool's `accOAVAXPerShare` (and `lastRewardBlock`) gets updated.
         //   2. User receives the pending reward sent to his/her address.
         //   3. User's `amount` gets updated.
         //   4. User's `rewardDebt` gets updated.
@@ -42,13 +42,13 @@ contract MasterChef is Ownable, ReentrancyGuard {
     // Info of each pool.
     struct PoolInfo {
         IERC20 lpToken; // Address of LP token contract.
-        uint256 allocPoint; // How many allocation points assigned to this pool. SUSHIs to distribute per block.
-        uint256 lastRewardBlock; // Last block number that SUSHIs distribution occurs.
-        uint256 accoAVAXPerShare; // Accumulated SUSHIs per share, times 1e12. See below.
+        uint256 allocPoint; // How many allocation points assigned to this pool. OAVAXs to distribute per block.
+        uint256 lastRewardBlock; // Last block number that OAVAXs distribution occurs.
+        uint256 accOAVAXPerShare; // Accumulated OAVAXs per share, times 1e12. See below.
     }
 
-    // The oAVAX TOKEN!
-    oAVAXToken public oAVAX;
+    // The OAVAX TOKEN!
+    OAVAXToken public OAVAX;
     // Dev address.
     address public devaddr;
     //Dev mint devisor, can only be increased, reducing percentage.
@@ -57,13 +57,13 @@ contract MasterChef is Ownable, ReentrancyGuard {
     address public rewardCollector;
     // LP Depositor address for blocktime change
     address public lpDepositor;
-    // Block number when bonus oAVAX period ends.
+    // Block number when bonus OAVAX period ends.
     uint256 public bonusEndBlock;
-    // oAVAX tokens created per block.
-    uint256 public oAVAXPerBlock;
-    //Amount of sushis per Second
-    uint256 public oAVAXPerSecond;
-    // Bonus muliplier for early oAVAX makers.
+    // OAVAX tokens created per block.
+    uint256 public OAVAXPerBlock;
+    //Amount of oavaxs per Second
+    uint256 public OAVAXPerSecond;
+    // Bonus muliplier for early OAVAX makers.
     uint256 public constant BONUS_MULTIPLIER = 1;
     // Info of each pool.
     PoolInfo[] public poolInfo;
@@ -75,7 +75,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
     mapping(IERC20 => bool) public poolExistence;
     // Total allocation poitns. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocPoint = 0;
-    // The block number when oAVAX mining starts.
+    // The block number when OAVAX mining starts.
     uint256 public startBlock;
     // Last Blocktime in Milliseconds
     uint256 public lastBlocktime;
@@ -84,7 +84,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
 
     event DevFundLowered(uint8 currentAmount);
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
-    event RewardChange(uint256 oAVAXPerBlock, uint256 Blocktime);
+    event RewardChange(uint256 OAVAXPerBlock, uint256 Blocktime);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event EmergencyWithdraw(
         address indexed user,
@@ -120,20 +120,20 @@ contract MasterChef is Ownable, ReentrancyGuard {
     }
 
     constructor(
-        oAVAXToken _sushi,
+        OAVAXToken _oavax,
         address _devaddr,
-        uint256 _sushiPerBlock,
-        uint256 _sushiPerSecond,
+        uint256 _oavaxPerBlock,
+        uint256 _oavaxPerSecond,
         uint256 _startBlock,
         uint256 _bonusEndBlock,
         uint256 _currentBlocktime,
         uint256 _lastBlocktime
     ) public {
-        oAVAX = _sushi;
+        OAVAX = _oavax;
         devaddr = _devaddr;
         rewardCollector = _devaddr;
-        oAVAXPerBlock = _sushiPerBlock;
-        oAVAXPerSecond = _sushiPerSecond;
+        OAVAXPerBlock = _oavaxPerBlock;
+        OAVAXPerSecond = _oavaxPerSecond;
         bonusEndBlock = _bonusEndBlock;
         startBlock = _startBlock;
         currentBlocktime = _currentBlocktime;
@@ -146,16 +146,16 @@ contract MasterChef is Ownable, ReentrancyGuard {
     //Changes rewards per block in Case an eventual Change in Avalanche BlockTime
     function updateBlockIssuanceWithBlocktime()
         public onlyOwner {
-        require(lastBlocktime != currentBlocktime , "oAVAX : Blocktime hasn't changed");
-        oAVAXPerBlock = currentBlocktime.mul(oAVAXPerSecond).div(1000);
+        require(lastBlocktime != currentBlocktime , "OAVAX : Blocktime hasn't changed");
+        OAVAXPerBlock = currentBlocktime.mul(OAVAXPerSecond).div(1000);
         lastBlocktime = currentBlocktime;
-        emit RewardChange(oAVAXPerBlock, currentBlocktime);
+        emit RewardChange(OAVAXPerBlock, currentBlocktime);
     }
 
     //Changes the Blocktime Parameter and updates the Rewards per Block
     function changeBlocktime(uint _currentBlocktime)
         public onlyOwner {
-        require(lastBlocktime != _currentBlocktime , "oAVAX : Blocktime hasn't changed");
+        require(lastBlocktime != _currentBlocktime , "OAVAX : Blocktime hasn't changed");
         require(_currentBlocktime <= 4000, "Can't set blockime over 4s.");
         
         massUpdatePools();
@@ -183,12 +183,12 @@ contract MasterChef is Ownable, ReentrancyGuard {
                 lpToken: _lpToken,
                 allocPoint: _allocPoint,
                 lastRewardBlock: lastRewardBlock,
-                accoAVAXPerShare: 1
+                accOAVAXPerShare: 1
             })
         );
     }
 
-    // Update the given pool's oAVAX allocation point. Can only be called by the owner.
+    // Update the given pool's OAVAX allocation point. Can only be called by the owner.
     function set(
         uint256 _pid,
         uint256 _allocPoint,
@@ -222,8 +222,8 @@ contract MasterChef is Ownable, ReentrancyGuard {
         }
     }
 
-    // View function to see pending SUSHIs on frontend.
-    function pendingoAVAX(uint256 _pid, address _user)
+    // View function to see pending OAVAXs on frontend.
+    function pendingOAVAX(uint256 _pid, address _user)
         external
         view
         validPID(_pid)
@@ -231,20 +231,20 @@ contract MasterChef is Ownable, ReentrancyGuard {
         {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
-        uint256 accoAVAXPerShare = pool.accoAVAXPerShare;
+        uint256 accOAVAXPerShare = pool.accOAVAXPerShare;
         uint256 lpSupply = pool.lpToken.balanceOf(address(this));
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 multiplier =
                 getMultiplier(pool.lastRewardBlock, block.number);
-            uint256 oAVAXReward =
-                multiplier.mul(oAVAXPerBlock).mul(pool.allocPoint).div(
+            uint256 OAVAXReward =
+                multiplier.mul(OAVAXPerBlock).mul(pool.allocPoint).div(
                     totalAllocPoint
                 );
-            accoAVAXPerShare = accoAVAXPerShare.add(
-                oAVAXReward.mul(1e12).div(lpSupply)
+            accOAVAXPerShare = accOAVAXPerShare.add(
+                OAVAXReward.mul(1e12).div(lpSupply)
             );
         }
-        return user.amount.mul(accoAVAXPerShare).div(1e12).sub(user.rewardDebt);
+        return user.amount.mul(accOAVAXPerShare).div(1e12).sub(user.rewardDebt);
     }
     function amountStaked(uint256 _pid, address _user)
         external
@@ -277,26 +277,26 @@ contract MasterChef is Ownable, ReentrancyGuard {
             return;
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 oAVAXReward =
-            multiplier.mul(oAVAXPerBlock).mul(pool.allocPoint).div(
+        uint256 OAVAXReward =
+            multiplier.mul(OAVAXPerBlock).mul(pool.allocPoint).div(
                 totalAllocPoint
             );
-        oAVAX.mint(devaddr, oAVAXReward.div(devDivisor));
-        oAVAX.mint(address(this), oAVAXReward);
-        pool.accoAVAXPerShare = pool.accoAVAXPerShare.add(
-            oAVAXReward.mul(1e12).div(lpSupply)
+        OAVAX.mint(devaddr, OAVAXReward.div(devDivisor));
+        OAVAX.mint(address(this), OAVAXReward);
+        pool.accOAVAXPerShare = pool.accOAVAXPerShare.add(
+            OAVAXReward.mul(1e12).div(lpSupply)
         );
         pool.lastRewardBlock = block.number;
     }
 
-    // Deposit LP tokens to MasterChef for oAVAX allocation.
+    // Deposit LP tokens to OAVAXChef for OAVAX allocation.
     function deposit(uint256 _pid, uint256 _amount) public validPID(_pid) nonReentrant {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         updatePool(_pid);
 
         if (user.amount > 0) {
-            uint256 pending = user.amount.mul(pool.accoAVAXPerShare).div(1e12).sub(user.rewardDebt);
+            uint256 pending = user.amount.mul(pool.accOAVAXPerShare).div(1e12).sub(user.rewardDebt);
             if (pending > 0) {
                 safeTokenTransfer(msg.sender, pending);
             }
@@ -309,7 +309,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
             user.amount = user.amount.add(finalAmount);
         }
         
-        user.rewardDebt = user.amount.mul(pool.accoAVAXPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accOAVAXPerShare).div(1e12);
         emit Deposit(msg.sender, _pid, _amount);
     }
 
@@ -323,7 +323,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         updatePool(_pid);
 
         if (user.amount > 0) {
-            uint256 pending = user.amount.mul(pool.accoAVAXPerShare).div(1e12).sub(user.rewardDebt);
+            uint256 pending = user.amount.mul(pool.accOAVAXPerShare).div(1e12).sub(user.rewardDebt);
             if (pending > 0) {
                 safeTokenTransfer(_user, pending); //Send rewards to _user not msg.sender
             }
@@ -338,38 +338,38 @@ contract MasterChef is Ownable, ReentrancyGuard {
             user.amount = user.amount.add(finalAmount);
         }
         
-        user.rewardDebt = user.amount.mul(pool.accoAVAXPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accOAVAXPerShare).div(1e12);
         emit Deposit(msg.sender, _pid, _amount);
     }
 
-    // Withdraw LP tokens from MasterChef.
+    // Withdraw LP tokens from OAVAXChef.
     function withdraw(uint256 _pid, uint256 _amount) public validPID(_pid) nonReentrant{
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
         updatePool(_pid);
         uint256 pending =
-            user.amount.mul(pool.accoAVAXPerShare).div(1e12).sub(
+            user.amount.mul(pool.accOAVAXPerShare).div(1e12).sub(
                 user.rewardDebt
             );
         safeTokenTransfer(msg.sender, pending);
         user.amount = user.amount.sub(_amount);
-        user.rewardDebt = user.amount.mul(pool.accoAVAXPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accOAVAXPerShare).div(1e12);
         pool.lpToken.safeTransfer(address(msg.sender), _amount);
         emit Withdraw(msg.sender, _pid, _amount);
     }
 
-    //Withdraw users oAVAX token by Collector address. Allows some flexibility to the dev.
+    //Withdraw users OAVAX token by Collector address. Allows some flexibility to the dev.
     //Does not withdraw LPs
     function extWithdraw(uint256 _pid, address _user)
     public onlyCollector validPID(_pid) nonReentrant{
-        uint256 _amount = 0; //HardCoded 0 Amount: Withdraw only oAVAX tokens and not LP tokens
+        uint256 _amount = 0; //HardCoded 0 Amount: Withdraw only OAVAX tokens and not LP tokens
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
         require(user.amount >= _amount, "withdraw: not good");
         updatePool(_pid);
         uint256 pending =
-            user.amount.mul(pool.accoAVAXPerShare).div(1e12).sub(
+            user.amount.mul(pool.accOAVAXPerShare).div(1e12).sub(
                 user.rewardDebt
             );
 
@@ -377,7 +377,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
             safeTokenTransfer(_user, pending);
         }
 
-        user.rewardDebt = user.amount.mul(pool.accoAVAXPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accOAVAXPerShare).div(1e12);
         emit Withdraw(_user, _pid, _amount);
     }
 
@@ -397,14 +397,14 @@ contract MasterChef is Ownable, ReentrancyGuard {
         user.rewardDebt = 0;
     }
 
-    // Safe oAVAX transfer function, just in case if rounding error causes pool to not have enough SUSHIs.
+    // Safe OAVAX transfer function, just in case if rounding error causes pool to not have enough OAVAXs.
     function safeTokenTransfer(address _to, uint256 _amount) internal {
-        uint256 tokenBal = oAVAX.balanceOf(address(this));
+        uint256 tokenBal = OAVAX.balanceOf(address(this));
         bool transferSuccess = false;
         if (_amount > tokenBal) {
-            transferSuccess = oAVAX.transfer(_to, tokenBal);
+            transferSuccess = OAVAX.transfer(_to, tokenBal);
         } else {
-            transferSuccess = oAVAX.transfer(_to, _amount);
+            transferSuccess = OAVAX.transfer(_to, _amount);
         }
         require(transferSuccess, "safeTokenTransfer: transfer failed");
     }

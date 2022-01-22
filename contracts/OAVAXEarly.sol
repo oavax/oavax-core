@@ -6,19 +6,19 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./Ownable.sol";
 
 
-// SushiToken with Governance.
-contract SushiToken is ERC20("oAVAX Old Token", "OAVAXo"), Ownable {
-    /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (MasterChef).
+// OAVAXEarly with Governance.
+contract OAVAXEarly is ERC20("OAVAX Early", "OAVAXe"), Ownable {
+    /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (OAVAXChef).
     function mint(address _to, uint256 _amount) public onlyOwner {
         _mint(_to, _amount);
         _moveDelegates(address(0), _delegates[_to], _amount);
     }
     constructor (address _devlock) public {
-            _mint(_devlock, 14400000000000000000000000); //Mint dev tokens immidiatly and lock them in contract //14,400,000 oAVAX
+            _mint(_devlock, 14400000000000000000000000); //Mint dev tokens immidiatly and lock them in contract //14,400,000 OAVAX
     }
 
 
-    // Copied and modified from SUSHISWAP code:
+    // Copied and modified from OAVAX code:
     
     // Copied and modified from YAM code:
     // https://github.com/yam-finance/yam-protocol/blob/master/contracts/token/YAMGovernanceStorage.sol
@@ -122,9 +122,9 @@ contract SushiToken is ERC20("oAVAX Old Token", "OAVAXo"), Ownable {
         );
 
         address signatory = ecrecover(digest, v, r, s);
-        require(signatory != address(0), "oAVAX::delegateBySig: invalid signature");
-        require(nonce == nonces[signatory]++, "oAVAX::delegateBySig: invalid nonce");
-        require(now <= expiry, "oAVAX::delegateBySig: signature expired");
+        require(signatory != address(0), "OAVAX::delegateBySig: invalid signature");
+        require(nonce == nonces[signatory]++, "OAVAX::delegateBySig: invalid nonce");
+        require(now <= expiry, "OAVAX::delegateBySig: signature expired");
         return _delegate(signatory, delegatee);
     }
 
@@ -154,7 +154,7 @@ contract SushiToken is ERC20("oAVAX Old Token", "OAVAXo"), Ownable {
         view
         returns (uint256)
     {
-        require(blockNumber < block.number, "oAVAX::getPriorVotes: not yet determined");
+        require(blockNumber < block.number, "OAVAX::getPriorVotes: not yet determined");
 
         uint32 nCheckpoints = numCheckpoints[account];
         if (nCheckpoints == 0) {
@@ -191,7 +191,7 @@ contract SushiToken is ERC20("oAVAX Old Token", "OAVAXo"), Ownable {
         internal
     {
         address currentDelegate = _delegates[delegator];
-        uint256 delegatorBalance = balanceOf(delegator); // balance of underlying SUSHIs (not scaled);
+        uint256 delegatorBalance = balanceOf(delegator); // balance of underlying OAVAXs (not scaled);
         _delegates[delegator] = delegatee;
 
         emit DelegateChanged(delegator, currentDelegate, delegatee);
@@ -227,7 +227,7 @@ contract SushiToken is ERC20("oAVAX Old Token", "OAVAXo"), Ownable {
     )
         internal
     {
-        uint32 blockNumber = safe32(block.number, "oAVAX::_writeCheckpoint: block number exceeds 32 bits");
+        uint32 blockNumber = safe32(block.number, "OAVAX::_writeCheckpoint: block number exceeds 32 bits");
 
         if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
             checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;
